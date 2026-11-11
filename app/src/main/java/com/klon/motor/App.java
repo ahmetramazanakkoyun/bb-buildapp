@@ -22,6 +22,7 @@ public class App extends Application {
         if (proc != null && proc.contains(":p")) {
             try {
                 HookInstrumentation.install();
+                                CrashGuard.install();
                 CrashLog.log("INIT", "Instrumentation kancasi takildi");
             } catch (Throwable t) {
                 CrashLog.error("INIT", t);
