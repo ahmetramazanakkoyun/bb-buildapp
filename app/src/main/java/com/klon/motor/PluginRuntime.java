@@ -63,6 +63,23 @@ final class PluginRuntime {
         this.classLoader = new PathClassLoader(dex.toString(), libs.toString(), parent);
         CrashLog.log("RUNTIME", "pkg=" + pkg + " apks=" + apks.size() + " abi=" + abi
                 + "\n  dex=" + dex + "\n  libs=" + libs);
+        
+        // Tanilama: Unity'nin okumaya calistigi dosya hangi APK'da?
+        for (String a : apks) {
+            File f = new File(a);
+            try (java.util.zip.ZipFile z = new java.util.zip.ZipFile(a)) {
+                boolean has = z.getEntry("assets/bin/Data/unity_app_guid") != null;
+                CrashLog.log("DIAG", f.getName() + " okunabilir=" + f.canRead() + " unity_app_guid=" + has);
+            } catch (Throwable t) {
+                CrashLog.log("DIAG", f.getName() + " zip acilamadi: " + t);
+            }
+        }
+        try {
+            resources.getAssets().open("bin/Data/unity_app_guid").close();
+            CrashLog.log("DIAG", "AssetManager ile unity_app_guid OKUNDU");
+        } catch (Throwable t) {
+            CrashLog.log("DIAG", "AssetManager ile unity_app_guid okunamadi: " + t);
+        }
     }
 
     /** Oyunun Application sinifini olusturur (ana iplikte, ilk ekrandan once). */
