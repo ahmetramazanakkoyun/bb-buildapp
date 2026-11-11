@@ -7,6 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Dagilmis dosyalari yerine tasi
+        run: |
+          mkdir -p app/src/main/java/com/klon/motor
+          mv -f ./*.java app/src/main/java/com/klon/motor/ || true
+          if [ -f AndroidManifest.xml ]; then mv -f AndroidManifest.xml app/src/main/AndroidManifest.xml; fi
+          find app -type f | sort
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
