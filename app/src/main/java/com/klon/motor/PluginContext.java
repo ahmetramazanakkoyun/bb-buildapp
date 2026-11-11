@@ -30,6 +30,17 @@ final class PluginContext extends ContextWrapper {
     @Override public ClassLoader getClassLoader() { return rt.classLoader; }
 
     @Override
+    public String getPackageCodePath() {
+        CrashLog.log("CTX", "getPackageCodePath -> " + rt.appInfo.sourceDir);
+        return rt.appInfo.sourceDir;
+    }
+
+    @Override
+    public String getPackageResourcePath() {
+        CrashLog.log("CTX", "getPackageResourcePath -> " + rt.appInfo.sourceDir);
+        return rt.appInfo.sourceDir;
+    }
+    @Override
     public Context getApplicationContext() {
         return rt.application != null ? rt.application : this;
     }
