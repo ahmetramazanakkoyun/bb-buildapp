@@ -48,6 +48,52 @@ final class PluginContext extends ContextWrapper {
     @Override public File getDir(String name, int mode) { return dir("app_" + name); }
     @Override public File getDatabasePath(String name) { return new File(dir("databases"), name); }
 
+    // --- Dis depolama klasorleri: oyuna ait, yazilabilir klasorlere yonlendir ---
+    private File ext(String sub) {
+        return dir("ext/" + sub);
+    }
+
+    @Override
+    public File getExternalFilesDir(String type) {
+        File d = ext(type == null ? "files" : "files/" + type);
+        CrashLog.log("CTX", "getExternalFilesDir(" + type + ") -> " + d);
+        return d;
+    }
+
+    @Override
+    public File[] getExternalFilesDirs(String type) {
+        return new File[]{getExternalFilesDir(type)};
+    }
+
+    @Override
+    public File getExternalCacheDir() {
+        File d = ext("cache");
+        CrashLog.log("CTX", "getExternalCacheDir -> " + d);
+        return d;
+    }
+
+    @Override
+    public File[] getExternalCacheDirs() {
+        return new File[]{getExternalCacheDir()};
+    }
+
+    @Override
+    public File getObbDir() {
+        File d = ext("obb");
+        CrashLog.log("CTX", "getObbDir -> " + d);
+        return d;
+    }
+
+    @Override
+    public File[] getObbDirs() {
+        return new File[]{getObbDir()};
+    }
+
+    @Override
+    public File[] getExternalMediaDirs() {
+        return new File[]{ext("media")};
+    }
+
     @Override
     public FileInputStream openFileInput(String name) throws FileNotFoundException {
         return new FileInputStream(new File(getFilesDir(), name));
