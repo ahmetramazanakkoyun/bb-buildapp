@@ -87,7 +87,7 @@ final class ServiceSpy {
             this.am = am;
         }
 
-        @Override
+              @Override
         public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
             Object r;
             try {
@@ -97,7 +97,26 @@ final class ServiceSpy {
                 note(m.getName(), args, "HATA " + c);
                 throw c;
             }
+            r = spoof(m.getName(), args, r);
             note(m.getName(), args, r);
+            return r;
+        }
+
+        /** getPackagesForUid/getNameForUid donusunde, klon islemimizin UID'si icin oyunun paketini de ekler. */
+        private Object spoof(String name, Object[] args, Object r) {
+            try {
+                if (!am && "getPackagesForUid".equals(name) && args != null && args.length > 0
+                        && args[0] instanceof Integer && r instanceof String[]) {
+                    return IdentitySpoof.addIfMatch((Integer) args[0], (String[]) r);
+                }
+                if (!am && "getNameForUid".equals(name) && args != null && args.length > 0
+                        && args[0] instanceof Integer && r instanceof String
+                        && (Integer) args[0] == IdentitySpoof.spoofUid
+                        && IdentitySpoof.spoofPkg != null) {
+                    return IdentitySpoof.spoofPkg;
+                }
+            } catch (Throwable ignored) {
+            }
             return r;
         }
 
