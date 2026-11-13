@@ -1,4 +1,4 @@
-package com.klon.motor;
+    package com.klon.motor;
 
 import android.app.Application;
 import android.content.ComponentName;
@@ -63,7 +63,7 @@ final class PluginRuntime {
             dex.append(a);
         }
         ClassLoader parent = ClassLoader.getSystemClassLoader().getParent();
-        this.classLoader = new PathClassLoader(dex.toString(), libs.toString(), parent);
+        this.classLoader = new PathClassLoader(dex.toString(), libs.toString(), parent); PluginClassBridge.install(this.classLoader);
         CrashLog.log("RUNTIME", "pkg=" + pkg + " apks=" + apks.size() + " abi=" + abi
                 + "\n  dex=" + dex + "\n  libs=" + libs);
 
