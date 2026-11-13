@@ -23,6 +23,7 @@ public class App extends Application {
             try {
                 HookInstrumentation.install();
                 CrashGuard.install();
+                                ServiceSpy.install();
                 CrashLog.log("INIT", "Instrumentation kancasi takildi");
             } catch (Throwable t) {
                 CrashLog.error("INIT", t);
