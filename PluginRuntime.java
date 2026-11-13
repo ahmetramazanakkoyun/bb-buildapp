@@ -64,6 +64,7 @@ final class PluginRuntime {
         }
         ClassLoader parent = ClassLoader.getSystemClassLoader().getParent();
         this.classLoader = new PathClassLoader(dex.toString(), libs.toString(), parent); PluginClassBridge.install(this.classLoader);
+                IdentitySpoof.activate(pkg);
         CrashLog.log("RUNTIME", "pkg=" + pkg + " apks=" + apks.size() + " abi=" + abi
                 + "\n  dex=" + dex + "\n  libs=" + libs);
 
