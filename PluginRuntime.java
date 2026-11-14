@@ -96,6 +96,7 @@ final class PluginRuntime {
         attach.invoke(app, new PluginContext(host, this));
         application = app;
         CrashLog.log("RUNTIME", "Application olusturuldu: " + name);
+                ActivitySpy.install(app);
         app.onCreate();
         CrashLog.log("RUNTIME", "Application.onCreate bitti");
     }
