@@ -27,6 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LogActivity" android:exported="false"/>
+                <activity android:name=".GmsProbeActivity"
+            android:process=":gmsprobe"
+            android:exported="false"/>
         <activity android:name=".PhoenixActivity"
             android:process=":phoenix"
             android:exported="false"
