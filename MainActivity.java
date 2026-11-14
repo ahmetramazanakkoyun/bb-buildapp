@@ -42,6 +42,11 @@ public class MainActivity extends Activity {
         logBtn.setText("Hata kayitlari");
         logBtn.setOnClickListener(v -> startActivity(new Intent(this, LogActivity.class)));
         root.addView(logBtn);
+        
+        Button gmsBtn = new Button(this);
+        gmsBtn.setText("GMS deneyi (Faz 2 kesif)");
+        gmsBtn.setOnClickListener(v -> startActivity(new Intent(this, GmsProbeActivity.class)));
+        root.addView(gmsBtn);
 
         ListView list = new ListView(this);
         root.addView(list, new LinearLayout.LayoutParams(
