@@ -125,9 +125,13 @@
             try {
                 PluginRuntime rt = PluginRuntime.current();
                 if (rt == null || intent == null || intent.getComponent() == null) return intent;
-                ComponentName cn = intent.getComponent();
-                if (!rt.pkg.equals(cn.getPackageName())) return intent;
-                String cls = cn.getClassName();
+                          ComponentName cn = intent.getComponent();
+            if (!rt.pkg.equals(cn.getPackageName())) {
+                logGoogleIntent(intent, cn.getClassName());
+                return intent;
+            }
+            String cls = cn.getClassName();
+            logGoogleIntent(intent, cls);
                 if (cls.endsWith("ProcessPhoenix")) {
                     Intent restart = new Intent(App.instance, Stub0.class);
                     restart.putExtra(Const.EXTRA_PKG, rt.pkg);
@@ -172,5 +176,41 @@
                 CrashLog.error("execStartActivity-yansima", t);
                 throw new RuntimeException(t);
             }
+        }
+    }
+            
+    /** Tanilama: Google/GMS ile ilgili ekran isteklerinin tasidigi veriyi (extras) kaydeder. */
+    private static void logGoogleIntent(Intent intent, String cls) {
+        try {
+            String low = cls == null ? "" : cls.toLowerCase();
+            if (!low.contains("google") && !low.contains("gms") && !low.contains("signin")
+                    && !low.contains("auth")) return;
+            Bundle extras = intent.getExtras();
+            StringBuilder sb = new StringBuilder("GOOGLE-ISTEK cls=").append(cls)
+                    .append(" action=").append(intent.getAction());
+            if (extras == null || extras.keySet().isEmpty()) {
+                sb.append(" (extras yok)");
+            } else {
+                for (String key : extras.keySet()) {
+                    Object v;
+                    try {
+                        v = extras.get(key);
+                    } catch (Throwable t) {
+                        v = "okunamadi:" + t;
+                    }
+                    String vs;
+                    try {
+                        vs = String.valueOf(v);
+                    } catch (Throwable t) {
+                        vs = "?";
+                    }
+                    if (vs.length() > 280) vs = vs.substring(0, 280) + "...";
+                    sb.append("\n  [").append(key).append("] = ").append(vs)
+                            .append(" (").append(v == null ? "null" : v.getClass().getName()).append(")");
+                }
+            }
+            CrashLog.log("GINTENT", sb.toString());
+        } catch (Throwable t) {
+            CrashLog.error("GINTENT", t);
         }
     }
